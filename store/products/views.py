@@ -21,6 +21,7 @@ def products(request, category_id=None, page_number=1):
 
     context = {
         "title" : "Store - Каталог",
+        "category_id" : category_id,
         "categories" : ProductCategory.objects.all(),
         "products" : products_paginator,
     }

@@ -87,9 +87,13 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
                             <a class="page-link"
-                               href="{% if products.has_previous %} {% url 'products:paginator' products.previous_page_number %} {% else %} '#' {% endif %}"
-                               tabindex="-1" aria-disabled="true">
-                               Previous
+                                {% if not category_id %}
+                                    href="{% if products.has_previous %} {% url 'products:paginator' products.previous_page_number %} {% else %} '#' {% endif %}"
+                                {% else %}
+                                    href="{% if products.has_previous %} {% url 'products:category' category_id products.previous_page_number %} {% else %} '#' {% endif %}"
+                                {% endif %}
+                                tabindex="-1" aria-disabled="true">
+                                Previous
                             </a>
                         </li>
 
@@ -103,8 +107,13 @@
 
                         <li class="page-item {% if not products.has_next %} disabled {% endif %}">
                             <a class="page-link" 
-                               href="{% if products.has_next %} {% url 'products:paginator' products.next_page_number %} {% else %} '#' {% endif %}">
-                               Next
+                                {% if not category_id %}
+                                    href="{% if products.has_next %} {% url 'products:paginator' products.next_page_number %} {% else %} '#' {% endif %}"
+                                {% else %}
+                                    href="{% if products.has_next %} {% url 'products:category' category_id products.next_page_number %} {% else %} '#' {% endif %}"
+                                {% endif %}
+                                >
+                                Next
                             </a>
                         </li>
                     </ul>
