@@ -19,13 +19,14 @@ def products(request, category_id=None, page_number=1):
     paginator = Paginator(products, per_page)
     products_paginator = paginator.page(page_number)
 
+
     context = {
         "title" : "Store - Каталог",
         "category_id" : category_id,
         "categories" : ProductCategory.objects.all(),
         "products" : products_paginator,
     }
-
+    
     return render(request, 'products/products.html', context)
 
 
