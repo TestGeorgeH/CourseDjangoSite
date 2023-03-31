@@ -6,34 +6,31 @@ from django.views.generic.list import ListView
 
 from products.models import Product, ProductCategory, Basket
 from users.models import User
+from common.views import TitleMixin
 
-class IndexView(TemplateView):
+class IndexView(TitleMixin, TemplateView):
     template_name = 'products/index.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Store"
-        return context
-    
-class ProductsListView(ListView):
+    title = 'Store'
+
+class ProductsListView(TitleMixin, ListView):
     model = Product
     template_name = 'products/products.html'
     paginate_by = 3
-    context_object_name = 'products'    
-    
+    context_object_name = 'products'
+    title = 'Store - Каталог'
+
     def get_queryset(self):
         queryset = super(ProductsListView, self).get_queryset()
         category_id = self.kwargs.get('category_id')
         print(f"qureyset call {queryset.filter(category_id=category_id) if category_id else queryset}")
         return queryset.filter(category_id=category_id) if category_id else queryset
 
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Store - Каталог"
         context["category_id"] = self.kwargs.get('category_id')
         context["categories"] = ProductCategory.objects.all()
-        
+
         print(f"context call {context}")
         return context
 
@@ -41,14 +38,14 @@ class ProductsListView(ListView):
 def basket_add(request, product_id):
     product = Product.objects.get(id=product_id)
     baskets = Basket.objects.filter(product=product, user=request.user)
-    
+
     if not baskets.exists():
         Basket.objects.create(user=request.user, product=product, quantity=1)
     else:
         basket = baskets.first()
         basket.quantity += 1
         basket.save()
-        
+
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
