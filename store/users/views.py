@@ -1,19 +1,20 @@
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.views import LoginView
-from django.contrib.messages.views import SuccessMessageMixin
 
-from users.models import User, EmailVerification
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from products.models import Basket
 from common.views import TitleMixin
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
+from users.models import EmailVerification, User
+
 
 class UserLoginView(TitleMixin, LoginView):
     template_name = 'users/login.html'
     form_class = UserLoginForm
     title = 'Store - Авторизация'
+
 
 class UserRegistrationView(SuccessMessageMixin, TitleMixin, CreateView):
     model = User
@@ -22,6 +23,7 @@ class UserRegistrationView(SuccessMessageMixin, TitleMixin, CreateView):
     success_url = reverse_lazy('users:login')
     success_message = 'Регистрация прошла успешно'
     title = 'Store - Регистрация'
+
 
 class UserProfileView(TitleMixin, UpdateView):
     model = User
@@ -39,7 +41,7 @@ class EmailVerificationView(TitleMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         code = kwargs['code']
-        user = User.objects.get(email=kwargs['email']) # ToDo: add a check if there is one email for two users
+        user = User.objects.get(email=kwargs['email'])  # ToDo: add a check if there is one email for two users
         email_verifications = EmailVerification.objects.filter(user=user, code=code)
         if email_verifications.exists() and not email_verifications.first().is_expired():
             user.is_verified_email = True
@@ -47,4 +49,3 @@ class EmailVerificationView(TitleMixin, TemplateView):
             return super(EmailVerificationView, self).get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse('index'))
-

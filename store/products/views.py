@@ -1,16 +1,16 @@
-from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.shortcuts import HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 
-from products.models import Product, ProductCategory, Basket
-from users.models import User
 from common.views import TitleMixin
+from products.models import Basket, Product, ProductCategory
+
 
 class IndexView(TitleMixin, TemplateView):
     template_name = 'products/index.html'
     title = 'Store'
+
 
 class ProductsListView(TitleMixin, ListView):
     model = Product
@@ -25,7 +25,6 @@ class ProductsListView(TitleMixin, ListView):
         print(f"qureyset call {queryset.filter(category_id=category_id) if category_id else queryset}")
         return queryset.filter(category_id=category_id) if category_id else queryset
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["category_id"] = self.kwargs.get('category_id')
@@ -33,6 +32,7 @@ class ProductsListView(TitleMixin, ListView):
 
         print(f"context call {context}")
         return context
+
 
 @login_required
 def basket_add(request, product_id):
@@ -47,6 +47,7 @@ def basket_add(request, product_id):
         basket.save()
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
 
 @login_required
 def basket_remove(request, basket_id):
