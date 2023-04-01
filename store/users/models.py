@@ -20,11 +20,12 @@ class EmailVerification(models.Model):
         verification_link = f"{settings.DOMAIN_NAME}{link}"
         subject = f"Подтверждение учетной записи для {self.user.username}"
         message = f"Для подтверждения учетной записи на сайте {settings.DOMAIN_NAME} перейдите по ссылке {verification_link}"
+        from_email = settings.EMAIL_HOST_USER
 
         send_mail(
             subject=subject,
             message=message,
-            from_email='from@example.com',
+            from_email=from_email,
             recipient_list=[self.user.email],
             fail_silently=False,
         )
