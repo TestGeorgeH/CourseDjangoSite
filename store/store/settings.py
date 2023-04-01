@@ -30,6 +30,8 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = []
 
+DOMAIN_NAME = 'http://localhost:8000'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -143,3 +145,6 @@ LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+# Sending Email
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
