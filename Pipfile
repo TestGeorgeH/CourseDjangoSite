@@ -8,11 +8,14 @@ django = "*"
 pillow = "*"
 psycopg2 = "*"
 django-allauth = "*"
+redis = "*"
+celery = {extras = ["redis"], version = "*"}
 
 [dev-packages]
 flake8 = "==4.0.0"
 isort = "*"
 wemake-python-styleguide = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.10"
