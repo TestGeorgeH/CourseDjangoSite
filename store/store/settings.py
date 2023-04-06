@@ -30,7 +30,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = []
 
-DOMAIN_NAME = 'http://localhost:8000'
+DOMAIN_NAME = 'http://127.0.0.1:8000'
 
 # Application definition
 
@@ -207,3 +207,14 @@ SOCIALACCOUNT_PROVIDERS = {
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+
+# Stripe
+
+# They are test keys, so it's fine to leave them like that.
+# I guess.
+
+STRIPE_PUBLIC_KEY = 'pk_test_51MtWxdHUOSDatYjK2hyfKsSrDnlNv1uaxQRo1aa9pGw15eUc8gvxxFKJYrSYDRulyfvyB3A5pJ3w1ZAGqnxcAAIq00FCcfjZxR'
+STRIPE_SECRET_KEY = 'sk_test_51MtWxdHUOSDatYjK4xQVCcmC9ffiRAYaWVo6BiN8TnSi5BOOk5XctJ5ditHCrd0sbyYsOqWm5oschgQPv25dGxDL00rtcWKzlT'
+STRIPE_WEBHOOK_PARING_CODE = 'works-solace-tough-gusto'
+STRIPE_ACCOUNT_ID = 'acct_1MtWxdHUOSDatYj'
+STRIPE_WEBHOOK_SECRET = 'whsec_ba6943b4de53763eafa750b4a3151d0c83cd04657a4cac8cd862de01789776c8'

@@ -10,6 +10,7 @@ psycopg2 = "*"
 django-allauth = "*"
 redis = "*"
 celery = {extras = ["redis"], version = "*"}
+stripe = "*"
 
 [dev-packages]
 flake8 = "==4.0.0"

@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 
 from products.models import Basket, Product, ProductCategory
@@ -5,10 +6,11 @@ from products.models import Basket, Product, ProductCategory
 admin.site.register(ProductCategory)
 
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'quantity', 'category')
-    fields = ('name', 'image', ('price', 'quantity'), 'category')
+    fields = ('name', 'image', ('price', 'quantity'), 'stripe_products_price_id', 'category')
     search_fields = ('name',)
 
 
