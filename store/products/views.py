@@ -13,6 +13,7 @@ class IndexView(TitleMixin, TemplateView):
 
 
 class ProductsListView(TitleMixin, ListView):
+    # TODO: fix pagination with categories, again
     model = Product
     template_name = 'products/products.html'
     paginate_by = 3

@@ -41,7 +41,7 @@ class EmailVerificationView(TitleMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         code = kwargs['code']
-        user = User.objects.get(email=kwargs['email'])  # ToDo: add a check if there is one email for two users
+        user = User.objects.get(email=kwargs['email'])  # TODO: add a check if there is one email for two users
         email_verifications = EmailVerification.objects.filter(user=user, code=code)
         if email_verifications.exists() and not email_verifications.first().is_expired():
             user.is_verified_email = True

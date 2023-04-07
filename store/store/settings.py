@@ -173,7 +173,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Sending Email
 
-# ToDo: change all of this to something else, that works
+# TODO: change all of this to something else, that works
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.yandex.com'
