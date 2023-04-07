@@ -27,7 +27,7 @@
                                 <td>{{ order.created|naturaltime}}</td>
                                 <td>{{ order.basket_history.total_sum}} руб.</td>
                                 <td>
-                                    <a href="order.html">посмотреть</a>
+                                    <a href="{% url 'orders:order' order.id %}">посмотреть</a>
                                 </td>
 
                             </tr>
