@@ -10,27 +10,53 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
+import environ
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+
+
+env = environ.Env(
+    DEBUG=(bool),
+    SECRET_KEY=(str),
+    DOMAIN_NAME=(str),
+
+    REDIS_HOST=(str),
+    REDIS_PORT=(str),
+
+    DATABASE_NAME=(str),
+    DATABASE_USER=(str),
+    DATABASE_PASSWORD=(str),
+    DATABASE_HOST=(str),
+    DATABASE_PORT=(str),
+
+    STRIPE_PUBLIC_KEY=(str),
+    STRIPE_SECRET_KEY=(str),
+    STRIPE_WEBHOOK_PARING_CODE=(str),
+    STRIPE_ACCOUNT_ID=(str),
+    STRIPE_WEBHOOK_SECRET=(str),
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Take environment variables from .env file
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=@^r9ncb!^o4s7)fx$9yz6t^fcnpm*=4z-po$bvws)4*^evqf^'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = []
 
-DOMAIN_NAME = 'http://127.0.0.1:8000'
+ALLOWED_HOSTS = ['*']
+
+
+DOMAIN_NAME = env('DOMAIN_NAME')
 
 # Application definition
 
@@ -42,13 +68,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'debug_toolbar',
     'django.contrib.humanize',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
+    'debug_toolbar',  # TODO: add dev apps to debug?
+    'django_extensions',
 
     'products',
     'orders',
@@ -92,10 +119,15 @@ INTERNAL_IPS = [
     'localhost',
 ]
 
+# Redis
+
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}',
     }
 }
 
@@ -105,11 +137,11 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'store_db',
-        'USER': 'store_username',
-        'PASSWORD': 'store_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
@@ -205,16 +237,16 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Celery
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
 # Stripe
 
 # They are test keys, so it's fine to leave them like that.
 # I guess.
 
-STRIPE_PUBLIC_KEY = 'pk_test_51MtWxdHUOSDatYjK2hyfKsSrDnlNv1uaxQRo1aa9pGw15eUc8gvxxFKJYrSYDRulyfvyB3A5pJ3w1ZAGqnxcAAIq00FCcfjZxR'
-STRIPE_SECRET_KEY = 'sk_test_51MtWxdHUOSDatYjK4xQVCcmC9ffiRAYaWVo6BiN8TnSi5BOOk5XctJ5ditHCrd0sbyYsOqWm5oschgQPv25dGxDL00rtcWKzlT'
-STRIPE_WEBHOOK_PARING_CODE = 'works-solace-tough-gusto'
-STRIPE_ACCOUNT_ID = 'acct_1MtWxdHUOSDatYj'
-STRIPE_WEBHOOK_SECRET = 'whsec_ba6943b4de53763eafa750b4a3151d0c83cd04657a4cac8cd862de01789776c8'
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_PARING_CODE = env('STRIPE_WEBHOOK_PARING_CODE')
+STRIPE_ACCOUNT_ID = env('STRIPE_ACCOUNT_ID')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
