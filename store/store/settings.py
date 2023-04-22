@@ -76,10 +76,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'debug_toolbar',  # TODO: add dev apps to debug?
     'django_extensions',
+    'rest_framework',
 
     'products',
     'orders',
     'users',
+    'api_app',
 ]
 
 MIDDLEWARE = [

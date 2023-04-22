@@ -12,6 +12,7 @@ redis = "*"
 celery = {extras = ["redis"], version = "*"}
 stripe = "*"
 django-environ = "*"
+djangorestframework = "*"
 
 [dev-packages]
 flake8 = "==4.0.0"
